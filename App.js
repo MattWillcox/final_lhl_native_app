@@ -5,6 +5,7 @@ import {
 } from 'react-navigation';
 import FavoritesScreen from './src/pages/Favorites'
 import MapScreen from './src/pages/Map';
+import FavMapScreen from './src/pages/FavMap';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 import {
@@ -146,7 +147,7 @@ class HomeScreen extends React.Component {
                   }
                 }}
 
-                currentLocation={true} // Will add a 'Current location' button at the top of the predefined places list
+                currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
                 currentLocationLabel="Current location"
                 nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
                 GoogleReverseGeocodingQuery={{
@@ -154,12 +155,11 @@ class HomeScreen extends React.Component {
                 }}
                 GooglePlacesSearchQuery={{
                   // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
-                  rankby: 'distance',
-                  types: 'food'
+                  rankby: 'distance'
                 }}
 
                 filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
-                debounce={100} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+                debounce={50} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
               />
           <Button
             onPress={() => {
@@ -184,11 +184,24 @@ const HomeTab = StackNavigator({
   }},
   {
     headerMode: 'none'
-  });
+  }
+)
+
+const FavTab = StackNavigator({
+  Favorites: {
+    screen: FavoritesScreen
+  },
+  FavMap: {
+    screen: FavMapScreen
+  }},
+  {
+    headerMode: 'none'
+  }
+)
 
 const App = TabNavigator({
   Main: { screen: HomeTab },
-  Favorites: { screen: FavoritesScreen },
+  Favorites: { screen: FavTab },
 }, {
   lazy: true,
   tabBarPosition: 'top',

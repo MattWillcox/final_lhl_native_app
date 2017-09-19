@@ -71,23 +71,6 @@ export default class MapScreen extends React.Component {
         })
       }
 
-
-         // <View
-         //    style={{
-         //    height: 40,
-         //    flexDirection: 'row',
-         //    justifyContent: 'flex-end'
-         //  }}>
-         //    <Button
-         //    onPress={() => {
-         //      AsyncStorage.clear(() => {
-         //        this.props.navigation.navigate('Home')
-         //      })
-         //    }}
-         //    title='Logout'
-         //    />
-         //  </View>
-
       return(
         <View
         style={{
@@ -97,7 +80,6 @@ export default class MapScreen extends React.Component {
         }}>
           <Button
             onPress={() => {
-              this.props.navigation.state.params.onUpdateHome();
               this.props.navigation.goBack()
             }}
             title='Back'
