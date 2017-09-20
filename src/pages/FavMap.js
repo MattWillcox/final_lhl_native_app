@@ -50,8 +50,8 @@ export default class FavMapScreen extends React.Component {
             initialRegion={{
               latitude: lat,
               longitude: lng,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
+              latitudeDelta: 0.0122,
+              longitudeDelta: 0.0121,
             }}
           >
             <MapView.Marker

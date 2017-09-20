@@ -4,6 +4,7 @@ import {
   TabNavigator,
 } from 'react-navigation';
 import App from '../../App'
+import styles from '../../styles'
 
 import {
   StyleSheet,
@@ -62,22 +63,22 @@ export default class FavoritesScreen extends React.Component {
       }
       if(newQuery){
         return (
-          <View key={i}>
-            <Text>{newQuery}</Text>
-            <Text>{favorite.name}</Text>
-            <Text>{favorite.address}</Text>
-            <TouchableHighlight onPress={() => this.props.navigation.navigate('FavMap', {favorite: favorite})}>
-              <Text>View on Map</Text>
+          <View key={i} style={styles.flexFavoritesChild}>
+            <Text style={styles.textHeader}>{newQuery}</Text>
+            <Text style={styles.textChild}>{favorite.name}</Text>
+            <Text style={styles.textChild}>{favorite.address}</Text>
+            <TouchableHighlight style={styles.viewOnMap} onPress={() => this.props.navigation.navigate('FavMap', {favorite: favorite})}>
+              <Text style={[styles.textChild, {color: 'white'}]}>View on Map</Text>
             </TouchableHighlight>
           </View>
         )
       } else {
         return(
-          <View key={i}>
-            <Text>{favorite.name}</Text>
-            <Text>{favorite.address}</Text>
-            <TouchableHighlight onPress={() => this.props.navigation.navigate('FavMap', {favorite: favorite})}>
-              <Text>View on Map</Text>
+          <View key={i} style={styles.flexFavoritesChild}>
+            <Text style={styles.textChild}>{favorite.name}</Text>
+            <Text style={styles.textChild}>{favorite.address}</Text>
+            <TouchableHighlight style={styles.viewOnMap} onPress={() => this.props.navigation.navigate('FavMap', {favorite: favorite})}>
+              <Text style={[styles.textChild, {color: 'white'}]}>View on Map</Text>
             </TouchableHighlight>
           </View>
         )
@@ -85,9 +86,11 @@ export default class FavoritesScreen extends React.Component {
     })
 
     return(
-      <View>
+      <ScrollView>
+        <View style={styles.flexFavoritesContainer}>
         {favoritesList}
-      </View>
+        </View>
+      </ScrollView>
     );
   }
   else{

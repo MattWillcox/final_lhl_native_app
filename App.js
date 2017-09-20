@@ -7,6 +7,8 @@ import FavoritesScreen from './src/pages/Favorites'
 import MapScreen from './src/pages/Map';
 import FavMapScreen from './src/pages/FavMap';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import styles from './styles'
+import './ReactotronConfig'
 
 import {
   StyleSheet,
@@ -15,7 +17,8 @@ import {
   TextInput,
   ScrollView,
   Button,
-  AsyncStorage
+  AsyncStorage,
+  TouchableOpacity
 } from 'react-native';
 
 class HomeScreen extends React.Component {
@@ -43,13 +46,14 @@ class HomeScreen extends React.Component {
   }
 
   onLogin(){
-    const { navigate } = this.props.navigation;
     let data = 'email=' + this.state.email + '&' + 'password=' + this.state.password
     axios.post('http://10.30.15.75:3000/login', data)
-    .then(async function(response) {
+    .then(async (response) => {
       try {
-        await AsyncStorage.setItem('token', response.data, () => {
-          this.setState({currUser: response.data});
+        await AsyncStorage.setItem('token', response.data, () =>{
+          AsyncStorage.getItem('token', (err, result) => {
+            this.setState({loggedIn: true, currUser: result});
+          })
         })
       } catch (error) {
           console.log(error);
@@ -106,11 +110,24 @@ class HomeScreen extends React.Component {
       return(
         <View
           style={{
-            height:400,
+            flex: 1,
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'stretch'
           }}>
+            <View>
+              <Text style={{
+                paddingTop: 80,
+                paddingLeft: 10,
+                paddingBottom: 10,
+                fontSize: 20,
+                fontFamily: 'sans-serif-medium',
+                color: 'steelblue'
+              }}>Where would you like to search?</Text>
+            </View>
+            <View style={{
+              height:150
+            }}>
               <GooglePlacesAutocomplete
                 placeholder='Search'
                 minLength={2} // minimum length of text to search
@@ -136,14 +153,13 @@ class HomeScreen extends React.Component {
                   types: 'geocode' // default: 'geocode'
                 }}
                 styles={{
-                  textInputContainer: {
-                    width: 300
+                  container: {
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'flex-start'
                   },
                   description: {
                     fontWeight: 'bold'
-                  },
-                  predefinedPlacesDescription: {
-                    color: '#1faadb'
                   }
                 }}
 
@@ -161,14 +177,31 @@ class HomeScreen extends React.Component {
                 filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
                 debounce={50} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
               />
-          <Button
-            onPress={() => {
-              AsyncStorage.clear(() => {
-                this.props.navigation.navigate('Home')
+            </View>
+          <TouchableOpacity onPress={() => {
+              AsyncStorage.removeItem('token', () => {
+                this.setState({loggedIn: false, currUser: ''})
               })
-            }}
-            title='Logout'
-          />
+            }}>
+            <View style={{
+              backgroundColor: 'steelblue',
+              height: 50,
+              marginRight: 100,
+              marginLeft: 100,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center'
+            }}>
+              <Text style={{
+                paddingTop: 10,
+                paddingLeft: 10,
+                paddingBottom: 10,
+                fontSize: 15,
+                fontFamily: 'sans-serif-medium',
+                color: 'white'
+              }}>Logout</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       )
     }
@@ -207,8 +240,11 @@ const App = TabNavigator({
   tabBarPosition: 'top',
   animationEnabled: true,
   tabBarOptions: {
-    activeTintColor: '#e91e63',
-  },
+    activeTintColor: 'yellow',
+    style: {
+      backgroundColor: 'steelblue',
+    }
+  }
 });
 export default App;
 
