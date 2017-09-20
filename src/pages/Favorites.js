@@ -68,7 +68,7 @@ export default class FavoritesScreen extends React.Component {
             <Text style={styles.textChild}>{favorite.name}</Text>
             <Text style={styles.textChild}>{favorite.address}</Text>
             <TouchableHighlight style={styles.viewOnMap} onPress={() => this.props.navigation.navigate('FavMap', {favorite: favorite})}>
-              <Text style={[styles.textChild, {color: 'white'}]}>View on Map</Text>
+              <Text style={[styles.textChild, {fontSize: 13}, {color: 'yellow'}, {marginLeft: 0}]}>View on Map</Text>
             </TouchableHighlight>
           </View>
         )
@@ -78,7 +78,7 @@ export default class FavoritesScreen extends React.Component {
             <Text style={styles.textChild}>{favorite.name}</Text>
             <Text style={styles.textChild}>{favorite.address}</Text>
             <TouchableHighlight style={styles.viewOnMap} onPress={() => this.props.navigation.navigate('FavMap', {favorite: favorite})}>
-              <Text style={[styles.textChild, {color: 'white'}]}>View on Map</Text>
+              <Text style={[styles.textChild, {fontSize: 13}, {color: 'yellow'}, {marginLeft: 0}]}>View on Map</Text>
             </TouchableHighlight>
           </View>
         )

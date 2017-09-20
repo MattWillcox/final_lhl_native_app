@@ -6,25 +6,36 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-around',
-    alignItems: 'flex-start'
+    alignItems: 'stretch'
   },
   flexFavoritesChild: {
     flex: 1,
-    padding: 5
+    marginLeft: 5
   },
   textChild: {
-    padding: 5, fontSize: 15,
-    fontFamily: 'sans-serif-medium'
+    fontSize: 16,
+    marginLeft: 15,
+    fontFamily: 'sans-serif-medium',
+    color: 'steelblue'
   },
   viewOnMap: {
     backgroundColor: 'steelblue',
-    width: 100,
-    alignSelf: 'flex-end'
+    width: 95,
+    height: 25,
+    alignSelf: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 15,
+    marginBottom: 10,
+    marginTop: 5
   },
   textHeader: {
     fontSize: 20,
     fontFamily: 'sans-serif-medium',
-    padding: 5
+    fontWeight: 'bold',
+    paddingBottom: 10,
+    color: 'steelblue',
+    textDecorationLine: 'underline'
   }
 })
 
