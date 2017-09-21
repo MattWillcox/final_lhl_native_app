@@ -10,7 +10,8 @@ import {
   TextInput,
   ScrollView,
   Button,
-  AsyncStorage
+  AsyncStorage,
+  StatusBar
 } from 'react-native';
 
 export default class MapScreen extends React.Component {
@@ -65,7 +66,7 @@ export default class MapScreen extends React.Component {
             <MapView.Marker
               coordinate={{latitude: place.geometry.location.lat, longitude: place.geometry.location.lng}}
               title={place.name}
-              description={rating.toString()}
+              description={'Rating out of 5:', rating.toString()}
               key={count}
             />
           )
@@ -79,23 +80,26 @@ export default class MapScreen extends React.Component {
           flexDirection: 'column',
           justifyContent: 'center'
         }}>
-          <Button
-            onPress={() => {
-              this.props.navigation.navigate('Home')
-            }}
-            title='Back'
-            />
+          <StatusBar
+               hidden={true}
+             />
           <MapView
             style={{ flex: 1 }}
             initialRegion={{
               latitude: lat,
               longitude: lng,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
+              latitudeDelta: 0.0222,
+              longitudeDelta: 0.0121,
             }}
           >
           {newResult}
           </MapView>
+            <Button
+            onPress={() => {
+              this.props.navigation.navigate('Home')
+            }}
+            title='Back'
+            />
         </View>
       );
     }

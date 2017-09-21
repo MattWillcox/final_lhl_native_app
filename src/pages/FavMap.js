@@ -10,7 +10,8 @@ import {
   TextInput,
   ScrollView,
   Button,
-  AsyncStorage
+  AsyncStorage,
+  StatusBar
 } from 'react-native';
 
 export default class FavMapScreen extends React.Component {
@@ -41,33 +42,40 @@ export default class FavMapScreen extends React.Component {
           flexDirection: 'column',
           justifyContent: 'center'
         }}>
-          <View style={{top: 10, alignSelf: 'center', width: 200, position: 'absolute' }}>
+          <StatusBar
+               hidden={true}
+             />
+          <MapView
+            style={{ flex: 1 }}
+            initialRegion={{
+              latitude: this.lat || 0,
+              longitude: this.lng || 0,
+              latitudeDelta: 0.0122,
+              longitudeDelta: 0.0121,
+            }}
+          >
+            <MapView.Marker
+              coordinate={{latitude: this.lat || 0, longitude: this.lng || 0}}
+              title={favorite.name}
+              description={'Rating out of 5:', favorite.rating}
+            />
+          </MapView>
             <Button
               onPress={() => {
                 this.props.navigation.goBack()
               }}
               title='Back'
             />
-          </View>
-          <MapView
-            style={{ flex: 1 }}
-            initialRegion={{
-              latitude: this.lat,
-              longitude: this.lng,
-              latitudeDelta: 0.0122,
-              longitudeDelta: 0.0121,
-            }}
-          >
-            <MapView.Marker
-              coordinate={{latitude: this.lat, longitude: this.lng}}
-              title={favorite.name}
-              description={favorite.rating}
-            />
-          </MapView>
         </View>
       );
     } else {
-      return (<Text>Loading...</Text>)
+      return (
+        <View>
+          <StatusBar
+               hidden={true}
+             />
+        <Text>Loading...</Text>
+        </View>)
     }
   }
 }

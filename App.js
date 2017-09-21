@@ -17,7 +17,8 @@ import {
   Button,
   AsyncStorage,
   Image,
-  Keyboard
+  Keyboard,
+  StatusBar
 } from 'react-native';
 
 class HomeScreen extends React.Component {
@@ -79,6 +80,9 @@ class HomeScreen extends React.Component {
             alignItems: 'center',
             height:200,
           }}>
+             <StatusBar
+               hidden={true}
+             />
             <View style={{
               height: 500
             }}>
@@ -159,6 +163,9 @@ class HomeScreen extends React.Component {
             flexDirection: 'column',
             justifyContent: 'center'
           }}>
+             <StatusBar
+               hidden={true}
+             />
             <View
             style={{
               padding: 15,

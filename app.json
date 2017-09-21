@@ -1,5 +1,19 @@
+
 {
-  "expo": {
-    "sdkVersion": "20.0.0"
+ "expo": {
+  "name": "NEARHERE",
+  "description": "This app allows users to find curated options while traveling.",
+  "version": "1.0.0",
+  "slug": "expo.o/MattWillcox/slug",
+  "sdkVersion": "20.0.0",
+  "privacy": "public",
+  "version": "0.0.1",
+  "orientation": "portrait",
+  "ios": {
+    "bundleIdentifier": "com.yourcompany.yourappname"
+  },
+  "android": {
+    "package": "com.yourcompany.yourappname"
   }
+ }
 }

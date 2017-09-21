@@ -16,7 +16,8 @@ import {
   ScrollView,
   Button,
   AsyncStorage,
-  TouchableHighlight
+  TouchableHighlight,
+  StatusBar
 } from 'react-native';
 
 export default class FavoritesScreen extends React.Component {
@@ -88,6 +89,9 @@ export default class FavoritesScreen extends React.Component {
 
       return(
           <View style={{flex: 1, marginLeft: 30, marginRight: 30, marginTop: 30}} >
+            <StatusBar
+               hidden={true}
+             />
             <Text style={{
               color:'steelblue',
               fontSize: 16,
@@ -112,6 +116,9 @@ export default class FavoritesScreen extends React.Component {
     if(this.state.noFavorites){
       return(
         <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+            <StatusBar
+               hidden={true}
+             />
           <Text style={{color:'steelblue', fontSize: 30}} >No Favorites Saved</Text>
         </View>
       )
@@ -119,7 +126,12 @@ export default class FavoritesScreen extends React.Component {
 
     else {
       return(
+        <View>
+          <StatusBar
+               hidden={true}
+             />
         <Text>Loading....</Text>
+        </View>
       )
     }
   }
