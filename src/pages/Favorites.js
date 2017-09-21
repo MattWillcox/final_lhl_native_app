@@ -29,7 +29,8 @@ export default class FavoritesScreen extends React.Component {
     this.state = {
       favorites: [],
       options: [],
-      currQuery: null
+      currQuery: null,
+      noFavorites: false
     }
 
     this._viewOnMap = this._viewOnMap.bind(this);
@@ -48,16 +49,21 @@ export default class FavoritesScreen extends React.Component {
           let userFavorites;
           if(result.data.length > 0) {
             userFavorites = this.state.favorites.concat(result.data);
+            this.setState({favorites: userFavorites, currQuery: userFavorites[0].query});
           } else {
             userFavorites = [];
+            this.setState({noFavorites: true, favorites: userFavorites, currQuery: ''});
           }
-          this.setState({favorites: userFavorites, currQuery: userFavorites[0].query});
+        })
+        .catch(error => {
+          this.setState({noFavorites: true})
         });
       }
     })
   }
 
   render(){
+    console.log(this.state);
     if(this.state.favorites.length > 0){
       let newQuery = '';
       let queryList = [];
@@ -102,7 +108,16 @@ export default class FavoritesScreen extends React.Component {
             </DropdownMenu>
           </View>
       );
-    } else {
+    }
+    if(this.state.noFavorites){
+      return(
+        <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{color:'steelblue', fontSize: 30}} >No Favorites Saved</Text>
+        </View>
+      )
+    }
+
+    else {
       return(
         <Text>Loading....</Text>
       )

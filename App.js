@@ -31,6 +31,7 @@ class HomeScreen extends React.Component {
       email: '',
       password: '',
       currUser: '',
+      loginFailed: false,
     }
 
     this.onLogin = this.onLogin.bind(this);
@@ -51,12 +52,13 @@ class HomeScreen extends React.Component {
     .then(async (response) => {
       try {
         await AsyncStorage.setItem('token', response.data, () => {
-          this.setState({loggedIn: true, currUser: response.data});
+          this.setState({loggedIn: true, loginFailed: false, currUser: response.data});
         })
       } catch (error) {
           console.log(error);
       }
     })
+    .catch(error => this.setState({loginFailed: true}))
   }
 
   _updateHome(){
@@ -64,6 +66,9 @@ class HomeScreen extends React.Component {
   }
 
   render(){
+    let loginError = null;
+    if(this.state.loginFailed)
+      loginError = 'LOGIN FAILED, PLEASE TRY AGAIN';
     if(this.state.loggedIn){
       return(
         <View
@@ -183,6 +188,7 @@ class HomeScreen extends React.Component {
                 title="Login"
                 onPress={this.onLogin}
               />
+              <Text style={{color:'steelblue', padding: 20}}>{loginError}</Text>
             </View>
         </View>
       )
