@@ -5,6 +5,8 @@ import {
 } from 'react-navigation';
 import App from '../../App'
 import styles from '../../styles'
+import FavoriteLocation from './FavoriteLocation'
+import DropdownMenu from 'react-native-dropdown-menu'
 
 import {
   StyleSheet,
@@ -25,14 +27,19 @@ export default class FavoritesScreen extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      favorites: []
+      favorites: [],
+      options: [],
+      currQuery: null
     }
+
+    this._viewOnMap = this._viewOnMap.bind(this);
+    this.options = [];
   }
 
   componentDidMount(){
     AsyncStorage.getItem('token', (err, value) => {
       if (value !== null){
-        axios.get("http://10.30.15.75:3000/favorites/all", {
+        axios.get("https://nearhere-lhl.herokuapp.com/favorites/all", {
           params: {
             user: value
           }
@@ -44,7 +51,7 @@ export default class FavoritesScreen extends React.Component {
           } else {
             userFavorites = [];
           }
-          this.setState({favorites: userFavorites});
+          this.setState({favorites: userFavorites, currQuery: userFavorites[0].query});
         });
       }
     })
@@ -52,52 +59,61 @@ export default class FavoritesScreen extends React.Component {
 
   render(){
     if(this.state.favorites.length > 0){
-    let newQuery = '';
-    let currQuery = '';
-    const favoritesList = this.state.favorites.map((favorite, i) => {
-      if(currQuery !== this.state.favorites[i].query) {
-        newQuery = favorite.query;
-        currQuery = favorite.query;
-      } else {
-        newQuery = null
-      }
-      if(newQuery){
-        return (
-          <View key={i} style={styles.flexFavoritesChild}>
-            <Text style={styles.textHeader}>{newQuery}</Text>
-            <Text style={styles.textChild}>{favorite.name}</Text>
-            <Text style={styles.textChild}>{favorite.address}</Text>
-            <TouchableHighlight style={styles.viewOnMap} onPress={() => this.props.navigation.navigate('FavMap', {favorite: favorite})}>
-              <Text style={[styles.textChild, {fontSize: 13}, {color: 'yellow'}, {marginLeft: 0}]}>View on Map</Text>
-            </TouchableHighlight>
-          </View>
-        )
-      } else {
-        return(
-          <View key={i} style={styles.flexFavoritesChild}>
-            <Text style={styles.textChild}>{favorite.name}</Text>
-            <Text style={styles.textChild}>{favorite.address}</Text>
-            <TouchableHighlight style={styles.viewOnMap} onPress={() => this.props.navigation.navigate('FavMap', {favorite: favorite})}>
-              <Text style={[styles.textChild, {fontSize: 13}, {color: 'yellow'}, {marginLeft: 0}]}>View on Map</Text>
-            </TouchableHighlight>
-          </View>
-        )
-      }
-    })
+      let newQuery = '';
+      let queryList = [];
+      let queryObj = {};
+      const favoritesList = this.state.favorites.forEach((favorite, i) => {
+        if(newQuery !== this.state.favorites[i].query) {
+          newQuery = favorite.query;
+          queryObj[newQuery] = [];
+          queryList.push(newQuery);
+        }
+        queryObj[newQuery].push(
+          <FavoriteLocation
+            key={i}
+            name={favorite.name}
+            address={favorite.address}
+            favorite={favorite}
+            query={favorite.query}
+            _onViewMap={this._viewOnMap}
+          />
+        );
+      })
 
-    return(
-      <ScrollView>
-        <View style={styles.flexFavoritesContainer}>
-        {favoritesList}
-        </View>
-      </ScrollView>
-    );
-  }
-  else{
-    return(
-      <Text>Loading....</Text>
+      return(
+          <View style={{flex: 1, marginLeft: 30, marginRight: 30, marginTop: 30}} >
+            <Text style={{
+              color:'steelblue',
+              fontSize: 16,
+              paddingBottom: 10
+            }}>Select a location below...</Text>
+            <DropdownMenu style={{height:200}}      //set the arrow icon, default is a triangle    //set the icon of the selected item, default is a check mark
+              bgColor={"steelblue"}                            //the background color of the head, default is grey
+              tintColor={"white"}                        //the text color of the head, default is white
+              selectItemColor={"steelblue"}                    //the text color of the selected item, default is red
+              data={[queryList]}
+              maxHeight={410}                            // the max height of the menu
+              handler={(selection, row) => this._dropdown_onSelect(queryList[row])} >
+              <ScrollView>
+                <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', paddingTop: 10}} >
+                  {queryObj[this.state.currQuery]}
+                </View>
+              </ScrollView>
+            </DropdownMenu>
+          </View>
+      );
+    } else {
+      return(
+        <Text>Loading....</Text>
       )
+    }
   }
+  _dropdown_onSelect(value){
+    this.setState({currQuery: value})
+  }
+
+  _viewOnMap(favorite){
+    this.props.navigation.navigate('FavMap', {favorite: favorite})
   }
 }
 

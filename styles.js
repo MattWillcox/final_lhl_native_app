@@ -15,7 +15,6 @@ const styles = StyleSheet.create({
   textChild: {
     fontSize: 16,
     marginLeft: 15,
-    fontFamily: 'sans-serif-medium',
     color: 'steelblue'
   },
   viewOnMap: {
@@ -31,7 +30,6 @@ const styles = StyleSheet.create({
   },
   textHeader: {
     fontSize: 20,
-    fontFamily: 'sans-serif-medium',
     fontWeight: 'bold',
     paddingBottom: 10,
     color: 'steelblue',

@@ -19,6 +19,8 @@ export default class FavMapScreen extends React.Component {
     this.state = {
       favorite: {}
     }
+    this.lat = 1;
+    this.long = 1;
   }
 
   componentDidMount(){
@@ -29,8 +31,8 @@ export default class FavMapScreen extends React.Component {
   render(){
     if(this.props.navigation.state.params.favorite){
       const { favorite } = this.state;
-      const lat = favorite.latitude;
-      const lng = favorite.longitude;
+      this.lat = favorite.latitude;
+      this.lng = favorite.longitude;
 
       return(
         <View
@@ -39,23 +41,25 @@ export default class FavMapScreen extends React.Component {
           flexDirection: 'column',
           justifyContent: 'center'
         }}>
-          <Button
-            onPress={() => {
-              this.props.navigation.goBack()
-            }}
-            title='Back'
+          <View style={{top: 10, alignSelf: 'center', width: 200, position: 'absolute' }}>
+            <Button
+              onPress={() => {
+                this.props.navigation.goBack()
+              }}
+              title='Back'
             />
+          </View>
           <MapView
             style={{ flex: 1 }}
             initialRegion={{
-              latitude: lat,
-              longitude: lng,
+              latitude: this.lat,
+              longitude: this.lng,
               latitudeDelta: 0.0122,
               longitudeDelta: 0.0121,
             }}
           >
             <MapView.Marker
-              coordinate={{latitude: lat, longitude: lng}}
+              coordinate={{latitude: this.lat, longitude: this.lng}}
               title={favorite.name}
               description={favorite.rating}
             />

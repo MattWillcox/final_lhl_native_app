@@ -7,8 +7,6 @@ import FavoritesScreen from './src/pages/Favorites'
 import MapScreen from './src/pages/Map';
 import FavMapScreen from './src/pages/FavMap';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import styles from './styles'
-import './ReactotronConfig'
 
 import {
   StyleSheet,
@@ -18,7 +16,8 @@ import {
   ScrollView,
   Button,
   AsyncStorage,
-  TouchableOpacity
+  Image,
+  Keyboard
 } from 'react-native';
 
 class HomeScreen extends React.Component {
@@ -46,14 +45,13 @@ class HomeScreen extends React.Component {
   }
 
   onLogin(){
+    const { navigate } = this.props.navigation;
     let data = 'email=' + this.state.email + '&' + 'password=' + this.state.password
-    axios.post('http://10.30.15.75:3000/login', data)
+    axios.post('https://nearhere-lhl.herokuapp.com/login', data)
     .then(async (response) => {
       try {
-        await AsyncStorage.setItem('token', response.data, () =>{
-          AsyncStorage.getItem('token', (err, result) => {
-            this.setState({loggedIn: true, currUser: result});
-          })
+        await AsyncStorage.setItem('token', response.data, () => {
+          this.setState({loggedIn: true, currUser: response.data});
         })
       } catch (error) {
           console.log(error);
@@ -66,68 +64,20 @@ class HomeScreen extends React.Component {
   }
 
   render(){
-    if(!this.state.loggedIn){
-      return(
-        <View
-          style={{
-            height:400,
-            flexDirection: 'column',
-            justifyContent: 'center'
-          }}>
-          <View
-          style={{
-            padding: 15,
-            flex: 2,
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center'
-            }}>
-            <Text>Login:</Text>
-            <TextInput
-              style={{width: 200, height: 40, borderColor: 'gray', borderWidth: 1}}
-              onChangeText={(email) => this.setState({email})}
-              value={this.state.text}
-              autoFocus={true}
-              keyboardType='email-address'
-              returnKeyType='next'
-            />
-            <Text>Password:</Text>
-            <TextInput
-              style={{width: 200, height: 40, borderColor: 'gray', borderWidth: 1}}
-              onChangeText={(password) => this.setState({password})}
-              value={this.state.text}
-              secureTextEntry={true}
-              returnKeyType='done'
-            />
-            <Button
-              title="Login"
-              onPress={this.onLogin}
-            />
-          </View>
-        </View>
-      );
-    } else {
+    if(this.state.loggedIn){
       return(
         <View
           style={{
             flex: 1,
             flexDirection: 'column',
             justifyContent: 'center',
-            alignItems: 'stretch'
+            alignItems: 'center',
+            height:200,
           }}>
-            <View>
-              <Text style={{
-                paddingTop: 80,
-                paddingLeft: 10,
-                paddingBottom: 10,
-                fontSize: 20,
-                fontFamily: 'sans-serif-medium',
-                color: 'steelblue'
-              }}>Where would you like to search?</Text>
-            </View>
             <View style={{
-              height:150
+              height: 500
             }}>
+            <Text style={{padding: 10, fontSize: 18, color: 'steelblue'}}>Where are you going to be?</Text>
               <GooglePlacesAutocomplete
                 placeholder='Search'
                 minLength={2} // minimum length of text to search
@@ -138,8 +88,9 @@ class HomeScreen extends React.Component {
                 renderDescription={(row) => row.description} // custom description render
                 onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
                   this.setState(this.state);
+                  Keyboard.dismiss();
                   let mapData = 'destination=' + data.description + '&user=' + this.state.currUser;
-                  axios.post('http://10.30.15.75:3000/map', mapData)
+                  axios.post('https://nearhere-lhl.herokuapp.com/map', mapData)
                   .then((res) => {this.props.navigation.navigate('Map', {onUpdateHome: this._updateHome.bind(this)})
                   });
                 }}
@@ -148,18 +99,23 @@ class HomeScreen extends React.Component {
                 }}
                 query={{
                   // available options: https://developers.google.com/places/web-service/autocomplete
-                  key: 'AIzaSyB5GDa5558nr1BrKFxboyA5lBw-9-RiAFc',
+                  key: 'AIzaSyDeN-yfNs6K_LC1MhkSjVYrsOV3PZvQSqM',
                   language: 'en', // language of the results
                   types: 'geocode' // default: 'geocode'
                 }}
                 styles={{
                   container: {
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'flex-start'
+
+                  },
+                  textInputContainer: {
+                    width: 300,
+                    alignSelf: 'center'
                   },
                   description: {
                     fontWeight: 'bold'
+                  },
+                  predefinedPlacesDescription: {
+                    color: '#1faadb'
                   }
                 }}
 
@@ -178,30 +134,56 @@ class HomeScreen extends React.Component {
                 debounce={50} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
               />
             </View>
-          <TouchableOpacity onPress={() => {
-              AsyncStorage.removeItem('token', () => {
-                this.setState({loggedIn: false, currUser: ''})
-              })
-            }}>
-            <View style={{
-              backgroundColor: 'steelblue',
-              height: 50,
-              marginRight: 100,
-              marginLeft: 100,
-              flexDirection: 'row',
+          <View style={{position: 'absolute', bottom: 10, width: 200, height: 50}}>
+            <Button
+              onPress={() => {
+                AsyncStorage.clear(() => {
+                  this.props.navigation.navigate('Home')
+                })
+              }}
+              title='Logout'
+            />
+          </View>
+        </View>
+      );
+    } else {
+      return(
+        <View
+          style={{
+            height:400,
+            flexDirection: 'column',
+            justifyContent: 'center'
+          }}>
+            <View
+            style={{
+              padding: 15,
+              flex: 2,
+              flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center'
-            }}>
-              <Text style={{
-                paddingTop: 10,
-                paddingLeft: 10,
-                paddingBottom: 10,
-                fontSize: 15,
-                fontFamily: 'sans-serif-medium',
-                color: 'white'
-              }}>Logout</Text>
+              }}>
+              <Text>Login:</Text>
+              <TextInput
+                style={{margin: 5, width: 200, height: 40, padding: 5, borderColor: 'gray', borderWidth: 1}}
+                onChangeText={(email) => this.setState({email})}
+                value={this.state.text}
+                autoFocus={true}
+                keyboardType='email-address'
+                returnKeyType='next'
+              />
+              <Text>Password:</Text>
+              <TextInput
+                style={{margin: 5, width: 200, height: 40, padding: 5, borderColor: 'gray', borderWidth: 1}}
+                onChangeText={(password) => this.setState({password})}
+                value={this.state.text}
+                secureTextEntry={true}
+                returnKeyType='done'
+              />
+              <Button
+                title="Login"
+                onPress={this.onLogin}
+              />
             </View>
-          </TouchableOpacity>
         </View>
       )
     }
@@ -241,10 +223,6 @@ const App = TabNavigator({
   animationEnabled: true,
   tabBarOptions: {
     activeTintColor: 'yellow',
-    style: {
-      backgroundColor: 'steelblue',
-    }
-  }
+  },
 });
 export default App;
-

@@ -34,7 +34,7 @@ export default class MapScreen extends React.Component {
   getGoogleResults(){
     AsyncStorage.getItem('token', (err, value) => {
       if (value !== null){
-        axios.get("http://10.30.15.75:3000/map", {
+        axios.get("https://nearhere-lhl.herokuapp.com/map", {
           params: {
             user: value
           }
@@ -60,11 +60,12 @@ export default class MapScreen extends React.Component {
         filterNum += 1;
         newResult = this.resultSet[filter].map((place, i) => {
           count += 1;
+          let rating = place.rating || '-1';
           return (
             <MapView.Marker
               coordinate={{latitude: place.geometry.location.lat, longitude: place.geometry.location.lng}}
               title={place.name}
-              description={place.rating.toString()}
+              description={rating.toString()}
               key={count}
             />
           )
@@ -80,7 +81,7 @@ export default class MapScreen extends React.Component {
         }}>
           <Button
             onPress={() => {
-              this.props.navigation.goBack()
+              this.props.navigation.navigate('HomeScreen')
             }}
             title='Back'
             />
