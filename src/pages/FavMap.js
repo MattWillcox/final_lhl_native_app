@@ -57,7 +57,7 @@ export default class FavMapScreen extends React.Component {
             <MapView.Marker
               coordinate={{latitude: this.lat || 0, longitude: this.lng || 0}}
               title={favorite.name}
-              description={'Rating out of 5:', favorite.rating}
+              description={'Rating: '+ favorite.rating + ' / 5.00'}
             />
           </MapView>
             <Button

@@ -108,7 +108,7 @@ class HomeScreen extends React.Component {
                 }}
                 query={{
                   // available options: https://developers.google.com/places/web-service/autocomplete
-                  key: 'AIzaSyDeN-yfNs6K_LC1MhkSjVYrsOV3PZvQSqM',
+                  key: 'AIzaSyB5GDa5558nr1BrKFxboyA5lBw-9-RiAFc',
                   language: 'en', // language of the results
                   types: 'geocode' // default: 'geocode'
                 }}

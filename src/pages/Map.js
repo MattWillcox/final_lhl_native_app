@@ -55,22 +55,20 @@ export default class MapScreen extends React.Component {
       const lat = this.mapCoordinates[0];
       const lng = this.mapCoordinates[1];
       let count = 0;
-      let filterNum = 0;
-      let newResult;
+      let newResult = [];
       for (let filter in this.resultSet) {
-        filterNum += 1;
-        newResult = this.resultSet[filter].map((place, i) => {
+        newResult = newResult.concat(this.resultSet[filter].map((place, i) => {
           count += 1;
           let rating = place.rating || '-1';
           return (
             <MapView.Marker
               coordinate={{latitude: place.geometry.location.lat, longitude: place.geometry.location.lng}}
               title={place.name}
-              description={'Rating out of 5:', rating.toString()}
+              description={'Rating: '+ place.rating + ' / 5.00'}
               key={count}
             />
           )
-        })
+        }))
       }
 
       return(

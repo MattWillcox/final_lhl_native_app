@@ -3,17 +3,21 @@
  "expo": {
   "name": "NEARHERE",
   "description": "This app allows users to find curated options while traveling.",
-  "version": "1.0.0",
-  "slug": "expo.o/MattWillcox/slug",
+  "slug": "nearhere",
   "sdkVersion": "20.0.0",
   "privacy": "public",
-  "version": "0.0.1",
+  "version": "4",
+  "icon": "./assets/icon.png",
   "orientation": "portrait",
-  "ios": {
-    "bundleIdentifier": "com.yourcompany.yourappname"
-  },
   "android": {
-    "package": "com.yourcompany.yourappname"
+    "permissions": [],
+    "package": "com.cbfc.nearhere",
+    "versionCode": 4,
+    "config": {
+      "googleMaps": {
+        "apiKey": "AIzaSyB5GDa5558nr1BrKFxboyA5lBw-9-RiAFc",
+      }
+    }
   }
  }
 }
